@@ -19,9 +19,10 @@ Refernces:
     
     Bellman-Ford Algorithm - Dynamic Programming Algorithms in Python (Part 3) 
     - https://www.youtube.com/watch?v=ne9eZ4ezg0Y
+
 """
 
-FLOAT_REF = float('inf')
+FLOAT_REF = float('inf')    # Constant to hold infinity
 
 class Bellman_Ford(object):
     """
@@ -39,8 +40,6 @@ class Bellman_Ford(object):
 
         self.graph = graph
         self.vertices = len(graph)
-
-        pass
 
     def shortest_paths(self, start_vertex, tolerance=0):
         """
