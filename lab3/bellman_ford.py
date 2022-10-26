@@ -75,7 +75,7 @@ class Bellman_Ford(object):
         # distance to infinity and predecessor vertex to None
         distance = {vertex: FLOAT_REF for vertex in self.graph}
         predecessor = {vertex: None for vertex in self.graph}
-
+        
         # Set the shortest distance of the start_vertex to 0
         distance[start_vertex] = 0
 
@@ -85,18 +85,24 @@ class Bellman_Ford(object):
         for _ in range(self.vertices - 1):
             # Update distance and precessor based on the adjacent vertices that
             # are next within the graph
-            for current, next, weight in self.graph:
-                if distance[current] is not FLOAT_REF and distance[current] + weight + tolerance < distance[next]:
-                    distance[next] = distance[current] + weight
-                    predecessor[next] = current
+            for current in self.graph:
+                for next in self.graph[current]:
+                    weight = self.graph[current][next]['price']
+                    
+                    if distance[current] is not FLOAT_REF and distance[current] + weight + tolerance < distance[next]:
+                        distance[next] = distance[current] + weight
+                        predecessor[next] = current
         
         # Negative cycle detection
         # Loop through the entire graph to look for negative distance values
-        for current, next, weight in self.graph:
-            if distance[current] is not FLOAT_REF and distance[current] + weight + tolerance < distance[next]:
-                # Return the distance, predecessor dictionaires and the edge
-                # for the negative cycle
-                return distance, predecessor, (current, next)
+        for current in self.graph:
+            for next in self.graph[current]:
+                weight = self.graph[current][next]['price']
+            
+                if distance[current] is not FLOAT_REF and distance[current] + weight + tolerance < distance[next]:
+                    # Return the distance, predecessor dictionaires and the edge
+                    # for the negative cycle
+                    return distance, predecessor, (current, next)
         
         # Return distance and predecessor dictionaries, with None for edge
         return distance, predecessor, None
