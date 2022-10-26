@@ -56,9 +56,10 @@ def deserialize_price(x: bytes) -> float:
     """
 
     # Use struct module to convert from bytes
-    return struct.unpack('d', x)
+    [price] = struct.unpack('d', x)
+    return price
 
-def serialize_address(address: Tuple(str, int)) -> bytes:
+def serialize_address(address: tuple) -> bytes:
     """
     Searialize the address tuple of a server into bytes in order to establish
     a connection.
@@ -101,7 +102,7 @@ def deserialize_utcdatetime(time: bytes) -> datetime:
     seconds = duration / MICROS_PER_SECOND
 
     # Return the difference between epoch time and the number of seconds
-    return epoch + timedelta(seconds)
+    return epoch + timedelta(seconds = seconds)
 
 def unmarshal_message(msg: bytes) -> list:
     """
@@ -132,7 +133,7 @@ def unmarshal_message(msg: bytes) -> list:
         
         # Assign parts of the byte stream to entries in the dictionary
         info['timestamp'] = deserialize_utcdatetime(msg_bytes[0:8])
-        info['cross'] = msg_bytes[8:11].decode(ENCODING) + '/' + msg_bytes[11:14].deco(ENCODING)
+        info['cross'] = msg_bytes[8:11].decode(ENCODING) + '/' + msg_bytes[11:14].decode(ENCODING)
         info['price'] = deserialize_price(msg_bytes[14:22])
 
         quotes.append(info)     # Add info dictionary to quotes list
